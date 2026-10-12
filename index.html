@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ee">
+  <meta name="description" content="A fresh path-drawing logic puzzle every day. Connect the numbers and fill the grid in one line.">
+  <title>One Line — a daily path puzzle</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%231c383a'/%3E%3Cpath d='M15 47V17h17v30h17V17' fill='none' stroke='%23f4c767' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="One Line home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M6 24V8h9v16h11V8"/></svg></span>
+        <span>one line<span class="brand-dot">.</span></span>
+      </a>
+      <nav class="mode-switch" aria-label="Puzzle mode">
+        <button id="daily-tab" class="mode-button active" type="button" aria-current="page">Daily puzzle</button>
+        <button id="practice-tab" class="mode-button" type="button">Practice</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> A little room to think</p>
+          <h1 id="page-title">Find your way <em>through.</em></h1>
+          <p class="hero-copy">One continuous path. Every square. Each number in order.</p>
+        </div>
+        <div class="hero-spark" aria-hidden="true"><span>1</span><i></i><span>2</span><i></i><span>3</span></div>
+      </section>
+
+      <div class="content-grid">
+        <section class="game-card" aria-labelledby="puzzle-heading">
+          <div class="game-topline">
+            <div>
+              <p id="puzzle-kicker" class="card-kicker">TODAY'S PUZZLE</p>
+              <h2 id="puzzle-heading">The daily line</h2>
+            </div>
+            <div class="timer" aria-label="Elapsed time"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 13V8M9 2h6"/></svg><span id="timer">00:00</span></div>
+          </div>
+
+          <div class="board-wrap">
+            <div id="grid" class="grid" role="group" aria-label="Puzzle grid. Start at number 1." tabindex="0"></div>
+            <svg id="path-svg" class="path-svg" aria-hidden="true" viewBox="0 0 5 5" preserveAspectRatio="none"><polyline id="path-line" points=""/></svg>
+          </div>
+
+          <div class="progress-row"><span id="progress-label">0 of 25 squares</span><span id="next-number">Start at 1</span></div>
+          <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
+
+          <div class="controls">
+            <button id="undo-button" class="control-button" type="button" title="Undo (Backspace)"><span aria-hidden="true">↶</span> Undo</button>
+            <button id="hint-button" class="control-button" type="button" title="Reveal the next step"><span aria-hidden="true">✳</span> Hint</button>
+            <button id="reset-button" class="control-button" type="button"><span aria-hidden="true">↻</span> Start over</button>
+          </div>
+
+          <div id="completion" class="completion" hidden>
+            <div class="completion-icon" aria-hidden="true">✓</div>
+            <div><strong>Beautifully done.</strong><p id="completion-copy">You found the line.</p></div>
+            <button id="share-button" class="share-button" type="button">Share result ↗</button>
+          </div>
+          <p id="announcement" class="sr-only" aria-live="polite"></p>
+        </section>
+
+        <aside class="side-column">
+          <section class="info-card">
+            <p class="card-kicker">HOW TO PLAY</p>
+            <h2>One path.<br>All the squares.</h2>
+            <ol class="rules">
+              <li><span>01</span><p>Begin at <strong>1</strong> and draw through neighboring squares.</p></li>
+              <li><span>02</span><p>Visit each numbered square in order.</p></li>
+              <li><span>03</span><p>Fill every square, ending at the last number. Thick borders are walls.</p></li>
+            </ol>
+            <p class="input-tip">Drag, tap squares, or use arrow keys. Move backward along your line to erase.</p>
+          </section>
+          <section class="note-card">
+            <div class="note-symbol" aria-hidden="true">✦</div>
+            <div><p class="card-kicker">YOUR CORNER</p><h3 id="record-title">A fresh start</h3><p id="record-copy">Finish today’s puzzle to begin your streak.</p></div>
+          </section>
+          <button id="next-button" class="next-button" type="button" hidden>Try another practice puzzle <span aria-hidden="true">→</span></button>
+        </aside>
+      </div>
+    </main>
+    <footer>Made for curious minds. A new daily puzzle arrives at midnight Pacific.</footer>
+  </div>
+</body>
+</html>
