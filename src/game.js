@@ -36,3 +36,21 @@ export function transformPuzzle(base, variant, reverse = false) {
   };
 }
 
+// Keep only distinct boards. Different source paths can produce the same visible puzzle.
+const VARIANTS = (() => {
+  const seen = new Set();
+  const result = [];
+  for (const reverse of [false, true]) {
+    for (let variant = 0; variant < 8; variant++) {
+      for (const base of PUZZLES) {
+        const puzzle = transformPuzzle(base, variant, reverse);
+        const signature = `${puzzle.clues.join(',')}|${puzzle.walls.map(([a, b]) => edgeKey(a, b)).sort().join(',')}`;
+        if (seen.has(signature)) continue;
+        seen.add(signature);
+        result.push({ base, variant, reverse });
+      }
+    }
+  }
+  return result;
+})();
+
