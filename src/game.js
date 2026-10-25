@@ -54,3 +54,5 @@ const VARIANTS = (() => {
   return result;
 })();
 
+export const PUZZLE_COUNT = VARIANTS.length;
+
