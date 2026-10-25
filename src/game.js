@@ -19,3 +19,20 @@ export function transformCell(index, size, variant) {
   return row * size + col;
 }
 
+export function transformPuzzle(base, variant, reverse = false) {
+  const map = index => transformCell(index, base.size, variant);
+  const solution = base.solution.map(map);
+  const clues = base.clues.map(map);
+  if (reverse) {
+    solution.reverse();
+    clues.reverse();
+  }
+  return {
+    id: `${base.id}-${variant}-${reverse ? 1 : 0}`,
+    size: base.size,
+    clues,
+    walls: base.walls.map(([a, b]) => [map(a), map(b)]),
+    solution,
+  };
+}
+
