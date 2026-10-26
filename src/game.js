@@ -63,3 +63,5 @@ function selectedPuzzle(index) {
   return transformPuzzle(base, variant, reverse);
 }
 
+const EPOCH_DAY = Math.floor(Date.UTC(2026, 9, 31) / 86400000);
+
