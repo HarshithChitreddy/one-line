@@ -73,3 +73,10 @@ export function pacificDayKey(date = new Date()) {
   return `${value('year')}-${value('month')}-${value('day')}`;
 }
 
+export function puzzleForDay(dateKey) {
+  const timestamp = /^\d{4}-\d{2}-\d{2}$/.test(dateKey) ? Date.parse(`${dateKey}T00:00:00Z`) : NaN;
+  if (!Number.isFinite(timestamp) || new Date(timestamp).toISOString().slice(0, 10) !== dateKey) throw new Error('Invalid date');
+  const day = Math.floor(timestamp / 86400000) - EPOCH_DAY;
+  return selectedPuzzle(day);
+}
+
