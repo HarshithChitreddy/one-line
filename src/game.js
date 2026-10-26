@@ -65,3 +65,11 @@ function selectedPuzzle(index) {
 
 const EPOCH_DAY = Math.floor(Date.UTC(2026, 9, 31) / 86400000);
 
+export function pacificDayKey(date = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(date);
+  const value = type => parts.find(part => part.type === type).value;
+  return `${value('year')}-${value('month')}-${value('day')}`;
+}
+
