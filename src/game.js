@@ -56,3 +56,10 @@ const VARIANTS = (() => {
 
 export const PUZZLE_COUNT = VARIANTS.length;
 
+function selectedPuzzle(index) {
+  if (!Number.isSafeInteger(index)) throw new Error('Invalid puzzle index');
+  const safe = ((index % PUZZLE_COUNT) + PUZZLE_COUNT) % PUZZLE_COUNT;
+  const { base, variant, reverse } = VARIANTS[safe];
+  return transformPuzzle(base, variant, reverse);
+}
+
