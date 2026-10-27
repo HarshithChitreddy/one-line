@@ -80,3 +80,7 @@ export function puzzleForDay(dateKey) {
   return selectedPuzzle(day);
 }
 
+export function practicePuzzle(index) {
+  return selectedPuzzle(index);
+}
+
