@@ -84,3 +84,23 @@ export function practicePuzzle(index) {
   return selectedPuzzle(index);
 }
 
+export function validatePuzzle(puzzle) {
+  const total = puzzle.size * puzzle.size;
+  const { solution, clues, walls } = puzzle;
+  if (solution.length !== total || new Set(solution).size !== total) return false;
+  if (solution.some(index => !Number.isInteger(index) || index < 0 || index >= total)) return false;
+  if (clues.length < 2 || clues[0] !== solution[0] || clues.at(-1) !== solution.at(-1)) return false;
+  const wallSet = new Set(walls.map(([a, b]) => edgeKey(a, b)));
+  if (walls.some(([a, b]) => !adjacent(a, b, puzzle.size))) return false;
+  for (let i = 1; i < total; i++) {
+    if (!adjacent(solution[i - 1], solution[i], puzzle.size) || wallSet.has(edgeKey(solution[i - 1], solution[i]))) return false;
+  }
+  let previous = -1;
+  for (const clue of clues) {
+    const position = solution.indexOf(clue);
+    if (position <= previous) return false;
+    previous = position;
+  }
+  return true;
+}
+
