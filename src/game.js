@@ -122,3 +122,20 @@ export function nextPath(puzzle, path, cell) {
   return [...path, cell];
 }
 
+export function moveIssue(puzzle, path, cell) {
+  const total = puzzle.size * puzzle.size;
+  if (!Number.isInteger(cell) || cell < 0 || cell >= total) return 'Choose a square in the grid.';
+  if (!path.length) return cell === puzzle.clues[0] ? '' : 'Start at number 1.';
+  if (path.includes(cell)) return '';
+  const last = path.at(-1);
+  if (!adjacent(last, cell, puzzle.size)) return 'Choose a neighboring square.';
+  if (puzzle.walls.some(([a, b]) => edgeKey(a, b) === edgeKey(last, cell))) return 'A wall blocks that move.';
+  const clueIndex = puzzle.clues.indexOf(cell);
+  if (clueIndex >= 0) {
+    const nextClue = puzzle.clues.filter(clue => path.includes(clue)).length;
+    if (clueIndex !== nextClue) return `Visit number ${nextClue + 1} next.`;
+    if (clueIndex === puzzle.clues.length - 1 && path.length !== total - 1) return 'Fill every square before the last number.';
+  }
+  return '';
+}
+
