@@ -104,3 +104,21 @@ export function validatePuzzle(puzzle) {
   return true;
 }
 
+export function nextPath(puzzle, path, cell) {
+  const total = puzzle.size * puzzle.size;
+  if (!Number.isInteger(cell) || cell < 0 || cell >= total) return path;
+  if (!path.length) return cell === puzzle.clues[0] ? [cell] : path;
+  const previousIndex = path.indexOf(cell);
+  if (previousIndex >= 0) return path.slice(0, previousIndex + 1);
+  const last = path.at(-1);
+  if (!adjacent(last, cell, puzzle.size)) return path;
+  if (puzzle.walls.some(([a, b]) => edgeKey(a, b) === edgeKey(last, cell))) return path;
+  const clueIndex = puzzle.clues.indexOf(cell);
+  if (clueIndex >= 0) {
+    const visitedClues = puzzle.clues.filter(clue => path.includes(clue)).length;
+    if (clueIndex !== visitedClues) return path;
+    if (clueIndex === puzzle.clues.length - 1 && path.length !== total - 1) return path;
+  }
+  return [...path, cell];
+}
+
