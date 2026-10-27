@@ -139,3 +139,19 @@ export function moveIssue(puzzle, path, cell) {
   return '';
 }
 
+export function isComplete(puzzle, path) {
+  const total = puzzle.size * puzzle.size;
+  if (path.length !== total || path[0] !== puzzle.clues[0] || path.at(-1) !== puzzle.clues.at(-1) || new Set(path).size !== total) return false;
+  const walls = new Set(puzzle.walls.map(([a, b]) => edgeKey(a, b)));
+  let nextClue = 0;
+  for (let i = 0; i < path.length; i++) {
+    const clue = puzzle.clues.indexOf(path[i]);
+    if (clue >= 0) {
+      if (clue !== nextClue) return false;
+      nextClue++;
+    }
+    if (i && (!adjacent(path[i - 1], path[i], puzzle.size) || walls.has(edgeKey(path[i - 1], path[i])))) return false;
+  }
+  return nextClue === puzzle.clues.length;
+}
+
