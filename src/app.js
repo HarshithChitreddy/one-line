@@ -22,3 +22,7 @@ function read(key) {
   try { return localStorage.getItem(key); } catch { return null; }
 }
 
+function write(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* Game remains playable without storage. */ }
+}
+
