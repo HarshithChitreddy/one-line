@@ -167,3 +167,12 @@ export function formatTime(seconds) {
   return `${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
+export function shareableGameUrl(href) {
+  try {
+    const url = new URL(href);
+    if (url.protocol !== 'https:' || ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)) return '';
+    return `${url.origin}${url.pathname}`;
+  } catch {
+    return '';
+  }
+}
