@@ -26,3 +26,7 @@ function write(key, value) {
   try { localStorage.setItem(key, value); } catch { /* Game remains playable without storage. */ }
 }
 
+function stateKey() {
+  return mode === 'daily' ? `one-line-daily-${today}` : `one-line-practice-${puzzle.id}`;
+}
+
