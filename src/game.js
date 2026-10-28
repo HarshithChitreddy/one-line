@@ -155,3 +155,10 @@ export function isComplete(puzzle, path) {
   return nextClue === puzzle.clues.length;
 }
 
+export function hintPath(puzzle, path) {
+  const firstWrong = path.findIndex((cell, index) => cell !== puzzle.solution[index]);
+  const correctLength = firstWrong < 0 ? path.length : firstWrong;
+  if (correctLength >= puzzle.solution.length) return path;
+  return puzzle.solution.slice(0, correctLength + 1);
+}
+
