@@ -30,3 +30,7 @@ function stateKey() {
   return mode === 'daily' ? `one-line-daily-${today}` : `one-line-practice-${puzzle.id}`;
 }
 
+function save() {
+  write(stateKey(), JSON.stringify({ puzzleId: puzzle.id, path, seconds, hints, completed }));
+}
+
