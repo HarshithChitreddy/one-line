@@ -55,3 +55,39 @@ function restore() {
   } catch { /* Ignore invalid saved data. */ }
 }
 
+function buildBoard() {
+  grid.innerHTML = '';
+  cells = [];
+  const wallSet = new Set(puzzle.walls.map(([a, b]) => `${Math.min(a, b)}-${Math.max(a, b)}`));
+  const hasWall = (a, b) => wallSet.has(`${Math.min(a, b)}-${Math.max(a, b)}`);
+  for (let index = 0; index < puzzle.size ** 2; index++) {
+    const row = Math.floor(index / puzzle.size);
+    const col = index % puzzle.size;
+    const clueIndex = puzzle.clues.indexOf(index);
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'cell';
+    cell.dataset.cell = String(index);
+    cell.tabIndex = -1;
+    if (clueIndex === 0) cell.classList.add('start');
+    if (clueIndex === puzzle.clues.length - 1) cell.classList.add('end');
+    if (col < puzzle.size - 1 && hasWall(index, index + 1)) cell.classList.add('wall-right');
+    if (row < puzzle.size - 1 && hasWall(index, index + puzzle.size)) cell.classList.add('wall-bottom');
+    const walls = [];
+    if (row > 0 && hasWall(index, index - puzzle.size)) walls.push('up');
+    if (col < puzzle.size - 1 && hasWall(index, index + 1)) walls.push('right');
+    if (row < puzzle.size - 1 && hasWall(index, index + puzzle.size)) walls.push('down');
+    if (col > 0 && hasWall(index, index - 1)) walls.push('left');
+    cell.dataset.walls = walls.join(', ');
+    if (clueIndex >= 0) {
+      const number = document.createElement('span');
+      number.className = 'number';
+      number.textContent = String(clueIndex + 1);
+      cell.append(number);
+    }
+    grid.append(cell);
+    cells.push(cell);
+  }
+  focusIndex = puzzle.clues[0];
+}
+
