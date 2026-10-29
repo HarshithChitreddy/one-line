@@ -91,3 +91,20 @@ function buildBoard() {
   focusIndex = puzzle.clues[0];
 }
 
+function dailyStreak() {
+  let streak = 0;
+  const cursor = new Date(`${today}T00:00:00Z`);
+  for (let i = 0; i < 366; i++) {
+    const key = cursor.toISOString().slice(0, 10);
+    let solved = false;
+    try { solved = JSON.parse(read(`one-line-daily-${key}`) || 'null')?.completed === true; } catch { /* Ignore invalid saved data. */ }
+    if (!solved) {
+      if (i === 0) { cursor.setUTCDate(cursor.getUTCDate() - 1); continue; }
+      break;
+    }
+    streak++;
+    cursor.setUTCDate(cursor.getUTCDate() - 1);
+  }
+  return streak;
+}
+
