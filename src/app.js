@@ -108,3 +108,9 @@ function dailyStreak() {
   return streak;
 }
 
+function updateRecord() {
+  const streak = dailyStreak();
+  $('#record-title').textContent = streak ? `${streak} day${streak === 1 ? '' : 's'} in a row` : 'A fresh start';
+  $('#record-copy').textContent = streak ? 'Your daily puzzle streak is growing.' : 'Finish today’s puzzle to begin your streak.';
+}
+
