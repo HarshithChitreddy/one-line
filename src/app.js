@@ -138,3 +138,7 @@ function render() {
   updateRecord();
 }
 
+function announce(message) {
+  $('#announcement').textContent = message;
+}
+
