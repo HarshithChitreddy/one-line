@@ -159,3 +159,24 @@ function advanceTimer() {
   save();
 }
 
+function applyCell(index, reportInvalid = false) {
+  if (completed) return;
+  const next = nextPath(puzzle, path, index);
+  if (next === path) {
+    if (reportInvalid) announce(moveIssue(puzzle, path, index));
+    return;
+  }
+  if (!path.length) {
+    timerAnchor = performance.now();
+    pendingMilliseconds = 0;
+  }
+  if (isComplete(puzzle, next)) advanceTimer();
+  path = next;
+  if (isComplete(puzzle, path)) {
+    completed = true;
+    announce(`Puzzle complete in ${formatTime(seconds)}.`);
+  }
+  save();
+  render();
+}
+
