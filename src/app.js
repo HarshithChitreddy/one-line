@@ -202,3 +202,26 @@ function choose(modeName) {
   announce(mode === 'daily' ? `Daily puzzle for ${dateLabel()}.` : `Practice puzzle ${practiceIndex + 1}.`);
 }
 
+grid.addEventListener('pointerdown', event => {
+  const cell = event.target.closest('[data-cell]');
+  if (!cell) return;
+  event.preventDefault();
+  dragging = true;
+  focusIndex = Number(cell.dataset.cell);
+  cell.focus();
+  applyCell(focusIndex, true);
+});
+
+window.addEventListener('pointermove', event => {
+  if (!dragging) return;
+  const cell = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-cell]');
+  if (cell && grid.contains(cell)) applyCell(Number(cell.dataset.cell));
+});
+window.addEventListener('pointerup', () => { dragging = false; });
+window.addEventListener('pointercancel', () => { dragging = false; });
+grid.addEventListener('click', event => {
+  if (event.detail !== 0) return;
+  const cell = event.target.closest('[data-cell]');
+  if (cell) applyCell(Number(cell.dataset.cell), true);
+});
+
