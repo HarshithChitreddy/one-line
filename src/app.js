@@ -114,3 +114,27 @@ function updateRecord() {
   $('#record-copy').textContent = streak ? 'Your daily puzzle streak is growing.' : 'Finish today’s puzzle to begin your streak.';
 }
 
+function render() {
+  const total = puzzle.size ** 2;
+  const visited = puzzle.clues.filter(clue => path.includes(clue)).length;
+  cells.forEach((cell, index) => {
+    const position = path.indexOf(index);
+    cell.classList.toggle('in-path', position >= 0);
+    cell.classList.toggle('current', index === path.at(-1));
+    cell.setAttribute('aria-label', `Row ${Math.floor(index / puzzle.size) + 1}, column ${index % puzzle.size + 1}${puzzle.clues.includes(index) ? `, number ${puzzle.clues.indexOf(index) + 1}` : ''}${position >= 0 ? ', in path' : ''}${cell.dataset.walls ? `, walls ${cell.dataset.walls}` : ''}`);
+    cell.tabIndex = index === focusIndex ? 0 : -1;
+  });
+  $('#path-line').setAttribute('points', path.map(index => `${index % puzzle.size + .5},${Math.floor(index / puzzle.size) + .5}`).join(' '));
+  $('#progress-label').textContent = `${path.length} of ${total} squares`;
+  $('#next-number').textContent = completed ? 'Complete!' : !path.length ? 'Start at 1' : visited < puzzle.clues.length ? `Next: ${visited + 1}` : 'Fill the remaining squares';
+  $('#progress-fill').style.width = `${path.length / total * 100}%`;
+  $('#timer').textContent = formatTime(seconds);
+  $('#undo-button').disabled = !path.length || completed;
+  $('#hint-button').disabled = completed;
+  $('#reset-button').disabled = completed;
+  $('#completion').hidden = !completed;
+  $('#completion-copy').textContent = `Solved in ${formatTime(seconds)}${hints ? ` with ${hints} hint${hints === 1 ? '' : 's'}` : ' without hints'}.`;
+  $('#next-button').hidden = mode !== 'practice';
+  updateRecord();
+}
+
