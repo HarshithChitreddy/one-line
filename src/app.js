@@ -180,3 +180,25 @@ function applyCell(index, reportInvalid = false) {
   render();
 }
 
+function choose(modeName) {
+  mode = modeName;
+  puzzle = mode === 'daily' ? puzzleForDay(today) : practicePuzzle(practiceIndex);
+  $('#daily-tab').classList.toggle('active', mode === 'daily');
+  $('#practice-tab').classList.toggle('active', mode === 'practice');
+  if (mode === 'daily') {
+    $('#daily-tab').setAttribute('aria-current', 'page');
+    $('#practice-tab').removeAttribute('aria-current');
+  } else {
+    $('#practice-tab').setAttribute('aria-current', 'page');
+    $('#daily-tab').removeAttribute('aria-current');
+  }
+  $('#puzzle-kicker').textContent = mode === 'daily' ? `${dateLabel().toUpperCase()} · DAILY PUZZLE` : `PRACTICE PUZZLE ${practiceIndex + 1}`;
+  $('#puzzle-heading').textContent = mode === 'daily' ? 'The daily line' : 'Keep going';
+  restore();
+  timerAnchor = performance.now();
+  pendingMilliseconds = 0;
+  buildBoard();
+  render();
+  announce(mode === 'daily' ? `Daily puzzle for ${dateLabel()}.` : `Practice puzzle ${practiceIndex + 1}.`);
+}
+
