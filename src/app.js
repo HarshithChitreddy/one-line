@@ -142,3 +142,20 @@ function announce(message) {
   $('#announcement').textContent = message;
 }
 
+function advanceTimer() {
+  const now = performance.now();
+  const delta = Math.max(0, now - timerAnchor);
+  timerAnchor = now;
+  if (!path.length || completed || document.hidden) {
+    pendingMilliseconds = 0;
+    return;
+  }
+  pendingMilliseconds += delta;
+  const elapsed = Math.floor(pendingMilliseconds / 1000);
+  if (!elapsed) return;
+  pendingMilliseconds -= elapsed * 1000;
+  seconds += elapsed;
+  $('#timer').textContent = formatTime(seconds);
+  save();
+}
+
