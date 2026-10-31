@@ -299,3 +299,8 @@ $('#share-button').addEventListener('click', async () => {
   } catch { announce('Sharing was cancelled or unavailable.'); }
 });
 
+setInterval(() => {
+  const currentDay = pacificDayKey();
+  if (currentDay !== today) {
+    today = currentDay;
+    if (mode === 'daily') 
