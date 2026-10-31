@@ -282,3 +282,20 @@ $('#reset-button').addEventListener('click', () => {
   render();
   announce('Puzzle reset.');
 });
+$('#daily-tab').addEventListener('click', () => choose('daily'));
+$('#practice-tab').addEventListener('click', () => choose('practice'));
+$('#next-button').addEventListener('click', () => {
+  practiceIndex++;
+  write('one-line-practice-index', String(practiceIndex));
+  choose('practice');
+});
+$('#share-button').addEventListener('click', async () => {
+  const label = mode === 'daily' ? `Daily ${today}` : `Practice #${practiceIndex + 1}`;
+  const link = shareableGameUrl(location.href);
+  const message = `One Line · ${label}\nSolved in ${formatTime(seconds)} · ${hints} hint${hints === 1 ? '' : 's'}${link ? `\n${link}` : ''}`;
+  try {
+    if (navigator.share) await navigator.share({ title: 'One Line', text: message });
+    else { await navigator.clipboard.writeText(message); announce('Result copied to clipboard.'); }
+  } catch { announce('Sharing was cancelled or unavailable.'); }
+});
+
