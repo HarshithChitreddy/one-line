@@ -225,3 +225,24 @@ grid.addEventListener('click', event => {
   if (cell) applyCell(Number(cell.dataset.cell), true);
 });
 
+grid.addEventListener('keydown', event => {
+  const deltas = { ArrowUp: -puzzle.size, ArrowDown: puzzle.size, ArrowLeft: -1, ArrowRight: 1 };
+  if (event.key in deltas) {
+    event.preventDefault();
+    const from = path.length ? path.at(-1) : focusIndex;
+    const target = from + deltas[event.key];
+    if (target >= 0 && target < puzzle.size ** 2 && Math.abs(Math.floor(target / puzzle.size) - Math.floor(from / puzzle.size)) + Math.abs(target % puzzle.size - from % puzzle.size) === 1) {
+      if (path.length) applyCell(target, true);
+      focusIndex = target;
+      cells[target].focus();
+      render();
+    }
+  } else if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    applyCell(Number(document.activeElement?.dataset.cell ?? focusIndex), true);
+  } else if (event.key === 'Backspace') {
+    event.preventDefault();
+    $('#undo-button').click();
+  }
+});
+
