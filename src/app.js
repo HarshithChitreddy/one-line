@@ -303,4 +303,15 @@ setInterval(() => {
   const currentDay = pacificDayKey();
   if (currentDay !== today) {
     today = currentDay;
-    if (mode === 'daily') 
+    if (mode === 'daily') choose('daily');
+    else updateRecord();
+  }
+  advanceTimer();
+}, 1000);
+
+document.addEventListener('visibilitychange', () => {
+  timerAnchor = performance.now();
+  pendingMilliseconds = 0;
+});
+
+choose('daily');
