@@ -246,3 +246,39 @@ grid.addEventListener('keydown', event => {
   }
 });
 
+$('#undo-button').addEventListener('click', () => {
+  if (!path.length || completed) return;
+  path = path.slice(0, -1);
+  save();
+  render();
+  announce('Last step removed.');
+});
+$('#hint-button').addEventListener('click', () => {
+  if (completed) return;
+  const next = hintPath(puzzle, path);
+  if (!path.length) {
+    timerAnchor = performance.now();
+    pendingMilliseconds = 0;
+  }
+  if (isComplete(puzzle, next)) advanceTimer();
+  path = next;
+  hints++;
+  if (isComplete(puzzle, path)) {
+    completed = true;
+    announce(`Puzzle complete in ${formatTime(seconds)}.`);
+  } else announce('A correct next step was revealed.');
+  save();
+  render();
+});
+$('#reset-button').addEventListener('click', () => {
+  if (completed) return;
+  path = [];
+  seconds = 0;
+  hints = 0;
+  completed = false;
+  timerAnchor = performance.now();
+  pendingMilliseconds = 0;
+  save();
+  render();
+  announce('Puzzle reset.');
+});
